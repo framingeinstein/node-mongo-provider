@@ -17,7 +17,6 @@ var Provider = function(host, port, database, collection) {
 		self.emit("connect", results);
 	});
 	self.collection = collection;
-	
 };
 
 util.inherits(Provider, EventEmitter);
@@ -156,7 +155,5 @@ Provider.prototype.destroy = function (callback) {
 		});		
 
 };
-
-
 
 exports.MongoProvider = Provider;
