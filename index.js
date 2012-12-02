@@ -11,7 +11,7 @@ var EventEmitter = require('events').EventEmitter;
 var Provider = function(host, port, database, collection) {
 	EventEmitter.call(this);
 	var self = this;
-	self.db = new Db(database, new Server(host, port, {auto_reconnect: true}, {}));
+	self.db = new Db(database, new Server(host, port, {auto_reconnect: true}, {}), {safe:false});
 	self.db.open(function(err, results){
 		if( err ) self.emit("error", err);
 		self.emit("connect", results);
