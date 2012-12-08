@@ -29,7 +29,7 @@ Provider.prototype.getCollection= function(callback) {
 };
 
 Provider.prototype.findAll = function(order, callback) {
-	if(typeof order == "Function") {
+	if(typeof order == "function") {
 		callback = order;
 		order = {};
 	}
@@ -62,7 +62,7 @@ Provider.prototype.findById = function(id, callback) {
 
 Provider.prototype.findWithOptions = function(document, options, callback) {
 	//console.log(document);
-	if(typeof options == "Function") {
+	if(typeof options == "function") {
 		callback = options;
 		options = {};
 	}
@@ -84,7 +84,7 @@ Provider.prototype.findWithOptions = function(document, options, callback) {
 
 Provider.prototype.find = function(document, order, callback) {
 	//console.log(order);
-	if(typeof order == "Function") {
+	if(typeof order == "function") {
 		//console.log("Setting Callback to order");
 		callback = order;
 		order = {};
@@ -96,7 +96,7 @@ Provider.prototype.find = function(document, order, callback) {
       if( error ) callback(error);
       else {
         collection.find(document).sort(order).toArray(function(error, results) {
-          if( error ) callback(error)
+          if( error ) callback(error);
           else {
 			callback(null, results);
 		  }
