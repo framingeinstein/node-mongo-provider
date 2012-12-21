@@ -43,6 +43,19 @@ Provider.prototype.getCollection= function(callback) {
   });
 };
 
+Provider.prototype.remove = function (document, options, callback) {
+	if(typeof options == "function") {
+		callback = options;
+		options = {};
+	}
+	this.getCollection(function(error, collection) {
+		collection.remove(document, options, function (error, result) {
+			if( error ) callback(error)
+			else callback(null, result)
+		});
+	});
+};
+
 Provider.prototype.findAll = function(order, callback) {
 	if(typeof order == "function") {
 		callback = order;

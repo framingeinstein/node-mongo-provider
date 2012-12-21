@@ -65,5 +65,27 @@ module.exports = {
 		});
 			
 	}
+	,'Remove': function (test) {
+		var MongoProvider = require('..').MongoProvider;
+		var provider = new MongoProvider('localhost', 27017, 'index', 'test');
+		provider.on("open", function (err, client) {
+			provider.save(document, function (err, doc) {
+				//console.dir(doc);
+				provider.remove(doc, {}, function (err, results) {
+					test.equal(null, err);
+					//console.dir(results);
+					provider.count(doc, function (err, result) {
+						test.equal(0, result);
+						provider.destroy(function (err, p) {
+							//console.log("Find " + provider.getState());
+							test.done();
+						});
+					});
+
+				});
+			});
+		});
+	}
+	
 
 };
