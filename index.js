@@ -12,8 +12,10 @@ var state = 'disconnected';
 
 var Provider = function(host, port, database, collection) {
 	EventEmitter.call(this);
-	var self = this;
+	
 	this.client = new Db(database, new Server(host, port, {auto_reconnect: true}), {safe:false});
+	
+	var self = this;
 	
 	this.client.open(function(err, db){
 		if( err ) self.emit("open", err, null);

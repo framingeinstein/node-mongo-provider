@@ -1,36 +1,21 @@
-var util = require('util');
+var MongoProvider = require('./').MongoProvider;
 
-var Db = require('mongodb').Db;
-var Connection = require('mongodb').Connection;
-var Server = require('mongodb').Server;
-var BSON = require('mongodb').BSON;
-var ObjectID = require('mongodb').ObjectID;
+var provider = new MongoProvider('localhost', 27017, 'index', 'test');
+/*
+provider.on("open", function (err, client) {
+	console.log("Opened");
+	provider.destroy(function (err, db) {
+		console.log("Destroyed");
+	})
+});
+*/
 
-var document = {field: 1, array: ["1", "2", "3"]};
-var database = "index";
-var collection = "test";
-var db = new Db(database, new Server('localhost', 27017, {auto_reconnect: true}), {safe:false});
 
-db.open(function(err, client){
-	if( err ) throw err;
-	db.collection(collection, function(error, collection) {
-	    if( error ) throw err;
-	    else {
-			collection.save(document, function(err, doc) {
-				console.dir(doc);
-				collection.find(document).sort({}).toArray(function(error, results) {
-					if( error ) throw error;
-					else {
-						console.dir(results);
-						db.close(function (err, client) {
-							console.log("closed");
-						});
-					}
-				});
-			
-			
-			});
-		}
+provider.on("open", function (err, client) {
+	provider.destroy(function (err, client) {
+		//test.equal(null, err);
+		//test.equal(provider.getState(), "disconnected");
+		console.log("Destroy: " + provider.getState());
+		//test.done();
 	});
-	//self.db.setProfilingLevel(2);
 });
