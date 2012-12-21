@@ -8,21 +8,34 @@ var ObjectID = require('mongodb').ObjectID;
 
 var EventEmitter = require('events').EventEmitter;
 
+var state = 'disconnected';
+
 var Provider = function(host, port, database, collection) {
 	EventEmitter.call(this);
 	var self = this;
-	self.db = new Db(database, new Server(host, port, {auto_reconnect: true}, {}), {safe:false});
-	self.db.open(function(err, results){
-		if( err ) self.emit("error", err);
-		self.emit("connect", results);
+	this.client = new Db(database, new Server(host, port, {auto_reconnect: true}), {safe:false});
+	
+	this.client.open(function(err, db){
+		if( err ) self.emit("open", err, null);
+		state = self.client.state;
+		self.emit("open", null, db);
+		//console.log(db.state);
+		//console.log("Open");
+		//self.db.setProfilingLevel(2);
 	});
-	self.collection = collection;
+	this.collection = collection;
+	
 };
 
 util.inherits(Provider, EventEmitter);
 
+Provider.prototype.getState = function () {
+	return state;
+}
+
+
 Provider.prototype.getCollection= function(callback) {
-  this.db.collection(this.collection, function(error, collection) {
+  this.client.collection(this.collection, function(error, collection) {
     if( error ) callback(error);
     else callback(null, collection);
   });
@@ -53,8 +66,8 @@ Provider.prototype.findById = function(id, callback) {
       if( error ) callback(error);
       else {
         collection.findOne({_id: collection.db.bson_serializer.ObjectID.createFromHexString(id)}, function(error, result) {
-          if( error ) callback(error)
-          else callback(null, result)
+          if( error ) callback(error);
+          else callback(null, result);
         });
       }
     });
@@ -96,7 +109,7 @@ Provider.prototype.find = function(document, order, callback) {
       if( error ) callback(error);
       else {
         collection.find(document).sort(order).toArray(function(error, results) {
-          if( error ) callback(error);
+          if( error ) callback(error)
           else {
 			callback(null, results);
 		  }
@@ -112,9 +125,9 @@ Provider.prototype.save = function(document, callback) {
         //if( typeof(it.length)=="undefined")
           //documents = [documents];
 
-          collection.save(document, function() {
-          callback(null, document);
-        });
+          	collection.save(document, function() {
+          		callback(null, document);
+        	});
       }
     });
 };
@@ -147,13 +160,18 @@ Provider.prototype.mapReduce = function(m, r, options, callback) {
 };
 
 Provider.prototype.destroy = function (callback) {
-
-		this.db.close(function (err, results) {
-			if (err) throw err;
-			console.log("Connection Closed");
+		var self = this;
+		self.client.close(function (err, db) {
+			if (err) callback(err, null);
+			//console.log("Connection Closed");
+			//console.dir();
+			state = self.client.state;
+			callback(null, db);
 			//return;
 		});		
 
 };
+
+
 
 exports.MongoProvider = Provider;

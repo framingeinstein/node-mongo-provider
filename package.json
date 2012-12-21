@@ -15,6 +15,9 @@
   "dependencies": {
     "mongodb": ">=1.0.0"
   },
+  "scripts": {
+    "test": "node_modules/.bin/nodeunit test"
+  },
   "devDependencies": {
     "nodeunit": ">=0.6.2"
   }
