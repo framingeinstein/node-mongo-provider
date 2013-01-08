@@ -66,7 +66,7 @@ Provider.prototype.findAll = function(order, callback) {
       //console.log("Retrieved Collection");
 	  if( error ) callback(error);
       else {
-        collection.find().toArray(function(error, results) {
+        collection.find({}, order).toArray(function(error, results) {
 		  //console.log("Documents Retrieved");
           if( error ) callback(error)
           else callback(null, results)
