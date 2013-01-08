@@ -12,15 +12,14 @@ Usage
 -----
 
 
-var MongoProvider = require('mongo-provider').MongoProvider;
-var myCollectionProvider = new MongoProvider('server', port, 'MyDatabase', 'MyCollection');
-
-provider.on("open", function (err, client) {
-	// Do something with client
-	…
+    var MongoProvider = require('mongo-provider').MongoProvider;
+    var myCollectionProvider = new MongoProvider('server', port, 'MyDatabase', 'MyCollection');
+    provider.on("open", function (err, client) {
+	    // Do something with client
+        …
 	
-	// Don't forget to destroy the provider to cleanup and close the connection
-	provider.destroy(function (err, client) {
-		//Do something when destroyed
-	});
-});
+        // Don't forget to destroy the provider to cleanup and close the connection
+        provider.destroy(function (err, client) {
+            //Do something when destroyed
+        });
+    });
