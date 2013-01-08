@@ -1,5 +1,6 @@
 mongo-provider - A simple wrapper for mongodb driver for NodeJS
 ====================
+[![Build Status](https://secure.travis-ci.org/framingeinstein/node-mongo-provider.png)](http://travis-ci.org/framingeinstein/node-mongo-provider)
 
 Installation
 ------------
